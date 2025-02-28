@@ -95,13 +95,13 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                             Text(
                                 text = interaction.question,
                                 fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = interaction.answer,
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
                             Spacer(modifier = Modifier.height(3.dp))

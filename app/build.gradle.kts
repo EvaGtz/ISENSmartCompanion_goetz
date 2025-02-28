@@ -74,7 +74,6 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
     // Jetpack Navigation for Compose
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     implementation ("androidx.compose.ui:ui:1.3.0")
@@ -94,4 +93,12 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
+    // WorkManager for background tasks
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    // Notifications
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.compose.material3:material3:1.0.0")
+    implementation("androidx.compose.ui:ui:1.4.0")
+    // For SharedPreferences (you can use Android's default SharedPreferences)
+    implementation("androidx.preference:preference-ktx:1.1.1")
 }

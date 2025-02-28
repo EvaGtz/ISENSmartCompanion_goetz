@@ -74,12 +74,12 @@ fun MainScreen() {
                 ) {
                     Text(
                         "MOI: $user",
+                        fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         fontSize = 13.sp
                     )
                     Text(
                         "SMART COMPANION: $aiResponse",
-                        fontWeight = FontWeight.Bold,
                         color = Color.Gray,
                         fontSize = 13.sp
                     )
