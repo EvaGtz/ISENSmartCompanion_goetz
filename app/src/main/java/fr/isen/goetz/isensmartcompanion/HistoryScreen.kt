@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.runtime.*
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.border
 
 @Composable
 fun HistoryScreen(interactionDao: InteractionDao) {
@@ -29,45 +31,49 @@ fun HistoryScreen(interactionDao: InteractionDao) {
     // Get the coroutine scope to launch coroutines within this composable
     val coroutineScope = rememberCoroutineScope()
 
-
-
-    //Box(
-    //    modifier = Modifier.fillMaxSize(),
-    //    contentAlignment = Alignment.Center
-    //) {
-    //    Text(
-    //        text = "Historique des événements",
-    //        fontSize = 20.sp,
-    //        fontWeight = FontWeight.Bold
-    //    )
-    //}
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Text(
-            text = "Historique des événements",
-            fontSize = 20.sp,
+            text = "HISTORIQUE DES EVENEMENTS",
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
+
+        Divider(
+            color = Color(0xFFD00000),
+            thickness = 2.dp,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         // Delete all history button
-        IconButton(
-            onClick = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    interactionDao.deleteAllInteractions()
-                }
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Filled.Delete,
-                contentDescription = "Delete All History",
-                tint = Color.Red
+            IconButton(
+                onClick = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        interactionDao.deleteAllInteractions()
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete All History",
+                    tint = Color(0xFFD00000)
+                )
+            }
+            Text(
+                text = "Supprimer tout l'historique",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD00000)
             )
         }
 
@@ -80,48 +86,55 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
+                        .border(2.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                         .clickable { /* Handle click if needed */ },
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFD00000))
+                    //colors = CardDefaults.cardColors(containerColor = Color.Gray)
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = interaction.question,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = interaction.answer,
-                            fontSize = 14.sp,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Date: ${
-                                SimpleDateFormat(
-                                    "dd/MM/yyyy HH:mm",
-                                    Locale.getDefault()
-                                ).format(Date(interaction.date))
-                            }",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
+                    Box(modifier = Modifier.fillMaxWidth()) { // Box allows overlaying elements
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = interaction.question,
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = interaction.answer,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.height(3.dp))
+                            Text(
+                                text = "Date: ${
+                                    SimpleDateFormat(
+                                        "dd/MM/yyyy HH:mm",
+                                        Locale.getDefault()
+                                    ).format(Date(interaction.date))
+                                }",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                        }
 
-                //Delete button
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            interactionDao.deleteInteraction(interaction)
+                        // Delete button positioned at top-right
+                        IconButton(
+                            onClick = {
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    interactionDao.deleteInteraction(interaction)
+                                }
+                            },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd) // Moves the icon to the top-right
+                                .padding(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete Interaction",
+                                tint = Color.Gray
+                            )
                         }
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete Interaction"
-                    )
                 }
             }
         }

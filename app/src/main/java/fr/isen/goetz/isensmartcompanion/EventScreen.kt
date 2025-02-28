@@ -26,6 +26,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 
 @Composable
 fun EventsScreen(navController: NavHostController) {
@@ -74,7 +76,10 @@ fun EventsScreen(navController: NavHostController) {
         if (isLoading) {
             CircularProgressIndicator()
         } else if (errorMessage.isNotEmpty()) {
-            Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error
+            )
         } else {
             LazyColumn {
                 items(events) { event ->
@@ -89,12 +94,13 @@ fun EventsScreen(navController: NavHostController) {
                                 intent.putExtra("event_json", jsonEvent) // Send event data in JSON
                                 context.startActivity(intent) // Start EventDetailActivity
                             },
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD00000))
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD00000)),
+                        shape = RoundedCornerShape(topEnd = 13.dp, bottomStart = 13.dp, bottomEnd = 13.dp)
                     ) {
                         Text(
                             color = Color(0xFFFFFFFF),
                             text = event.title,
-                            fontSize = 18.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(16.dp)
                         )

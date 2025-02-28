@@ -19,7 +19,8 @@ import com.google.gson.Gson
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.text.font.FontStyle
-
+import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +52,14 @@ class EventDetailActivity : ComponentActivity() {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 // Event Details
-                Box(
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
-                        .background(Color.Gray, shape = MaterialTheme.shapes.medium) // Set background color
-                        .padding(16.dp)
+                        .padding(16.dp),
+                        //.background(Color.Gray, shape = MaterialTheme.shapes.medium) // Set background color
+                    colors = CardDefaults.cardColors(containerColor = Color.Gray),
+                    shape = RoundedCornerShape(topStart = 13.dp, topEnd = 13.dp),
+                    //padding =
                 ) {
                     Text(
                         text = event.title,
@@ -78,17 +81,17 @@ class EventDetailActivity : ComponentActivity() {
 
                 Text(
                     text = "Date: ${event.date}",
-                    fontWeight = FontWeight.Light,
+                    //fontWeight = FontWeight.Light,
                     fontSize = 18.sp
                 )
                 Text(
                     text = "Lieu: ${event.location}",
-                    fontWeight = FontWeight.Light,
+                    //fontWeight = FontWeight.Light,
                     fontSize = 18.sp
                 )
                 Text(
                     text = "Catégorie: ${event.category}",
-                    fontWeight = FontWeight.Light,
+                    //fontWeight = FontWeight.Light,
                     fontSize = 18.sp
                 )
 
@@ -98,7 +101,7 @@ class EventDetailActivity : ComponentActivity() {
                     text = event.description,
                     fontSize = 18.sp,
                     fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.Light,
+                    //fontWeight = FontWeight.Light,
                     color = Color.Gray
                 )
             }
