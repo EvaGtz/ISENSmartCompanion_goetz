@@ -5,11 +5,12 @@ package fr.isen.goetz.isensmartcompanion
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
+import androidx.room.ColumnInfo
 
-@Entity(tableName = "interactions")
+@Entity(tableName = "interaction")
 data class Interaction(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,  // Unique ID for each interaction
-    val question: String,
-    val answer: String,
-    val date: Long = System.currentTimeMillis()  // Store the timestamp for the date of interaction
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "question") val question: String,
+    @ColumnInfo(name = "answer") val answer: String,  // Non-nullable String
+    @ColumnInfo(name = "date") val date: Long // Timestamp, for example
 )

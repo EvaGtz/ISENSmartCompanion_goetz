@@ -26,9 +26,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 
 @Composable
 fun MainScreen() {
-    val context = LocalContext.current // Local context for calling methods like startActivity if needed
+    val context =
+        LocalContext.current // Local context for calling methods like startActivity if needed
     var userInput by remember { mutableStateOf(TextFieldValue("")) }
     var messages by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) } // List of user-input and AI responses
+
+    //AppDatabase references
+    val database = AppDatabase.getDatabase(context)
+    val interactionDao = database.interactionDao()
 
     Column(
         modifier = Modifier
@@ -57,7 +62,8 @@ fun MainScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         //Messages between user and AI
-        LazyColumn(modifier = Modifier.weight(0.5f),
+        LazyColumn(
+            modifier = Modifier.weight(0.5f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(messages) { (user, aiResponse) ->
@@ -70,7 +76,7 @@ fun MainScreen() {
                         "MOI: $user",
                         color = Color.Black,
                         fontSize = 13.sp
-                        )
+                    )
                     Text(
                         "SMART COMPANION: $aiResponse",
                         fontWeight = FontWeight.Bold,
@@ -113,17 +119,35 @@ fun MainScreen() {
 
                         // Call the AI response in a coroutine
                         CoroutineScope(Dispatchers.Main).launch {
-                            val response = getGeminiResponse(inputText)
-                            messages = messages.dropLast(1) + (inputText to response) // Replace loading message with AI response
+                            val response =
+                                getGeminiResponse(inputText) // Get the AI response (nullable String)
+
+                            // Provide a default response if the response is null
+                            val responseText = response ?: "No response available"
+
+                            // Replace loading message with AI response
+                            messages = messages.dropLast(1) + (inputText to responseText)
+
+                            // Save to Room database after receiving response
+                            val interaction = Interaction(
+                                question = inputText,
+                                answer = responseText, // Pass the responseText (non-null now)
+                                date = System.currentTimeMillis() // Save the current timestamp
+                            )
+
+                            // Save to database (no need for a second CoroutineScope)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                interactionDao.insertInteraction(interaction) // Save interaction to database
+                            }
                         }
                     }
                 },
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier
                     .size(50.dp)
                     .padding(16.dp)
                     .background(Color(0xFFD00000), shape = RoundedCornerShape(8.dp))
             ) {
-                //For the white arrow
+                // For the white arrow
                 Icon(
                     imageVector = Icons.Filled.ArrowUpward,
                     contentDescription = "Envoyer",
@@ -140,18 +164,4 @@ fun AssistantUIPreview() {
     MainScreen()
 }
 
-//AppDatabase references
-val database = AppDatabase.getDatabase(context)
-val interactionDao = database.interactionDao()
-
-CoroutineScope(Dispatchers.Main).launch {
-    val response = getGeminiResponse(inputText)
-    messages = messages.dropLast(1) + (inputText to response)
-
-    // Save to Room database
-    val interaction = Interaction(question = inputText, answer = response)
-    CoroutineScope(Dispatchers.IO).launch {
-        interactionDao.insertInteraction(interaction)
-    }
-}
 

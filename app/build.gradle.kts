@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
 }
 
 android {
@@ -27,13 +28,16 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -70,10 +74,7 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    //pour l'historique
-    implementation ("androidx.room:room-runtime:2.5.0")
-    annotationProcessor ("androidx.room:room-compiler:2.5.0")
-    //kapt ("androidx.room:room-compiler:2.5.0")
+
     // Jetpack Navigation for Compose
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     implementation ("androidx.compose.ui:ui:1.3.0")
@@ -86,12 +87,11 @@ dependencies {
     implementation ("androidx.compose.material3:material3:1.0.0") // for Material 3 components
     implementation ("androidx.navigation:navigation-compose:2.5.0") // for Navigation
     implementation ("androidx.compose.runtime:runtime-saveable:1.4.0") // for rememberSaveable
-    implementation ("androidx.compose.runtime:runtime-saveable:1.4.0") // Add this for rememberSaveable
     implementation ("androidx.compose.material3:material3:1.0.0") // Ensure you have the Material3 dependency
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation ("com.google.code.gson:gson:2.8.8")
-    //For the Room dependency
-    implementation ("androidx.room:room-runtime:2.5.0")
-    //kapt ("androidx.room:room-compiler:2.5.0")
-    implementation ("androidx.room:room-ktx:2.5.0")
+    // For the Room dependency
+    implementation ("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
 }

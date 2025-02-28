@@ -1,7 +1,5 @@
 package fr.isen.goetz.isensmartcompanion
 
-//Next, create a class to handle the Room database. This will use the DAO to interact with the database.
-
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -20,7 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "interactions_database"
+                    "interactions_database" // Database name
                 ).build()
                 INSTANCE = instance
                 instance
