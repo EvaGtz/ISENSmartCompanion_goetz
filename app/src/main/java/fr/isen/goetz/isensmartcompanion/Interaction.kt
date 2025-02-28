@@ -4,7 +4,6 @@ package fr.isen.goetz.isensmartcompanion
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 import androidx.room.ColumnInfo
 
 @Entity(tableName = "interaction")

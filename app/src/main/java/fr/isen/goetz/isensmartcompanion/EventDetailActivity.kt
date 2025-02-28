@@ -28,9 +28,7 @@ import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import java.util.concurrent.TimeUnit
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import androidx.compose.ui.Alignment
 
 class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

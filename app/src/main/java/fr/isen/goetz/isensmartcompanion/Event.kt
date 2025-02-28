@@ -7,8 +7,4 @@ data class Event(
     val date: String,
     val location: String,
     val category: String
-) //{
-   // fun getNumericId(): Int? {
-     //   return id.toIntOrNull()
-    //}
-//}
+)

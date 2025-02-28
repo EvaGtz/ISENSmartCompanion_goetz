@@ -1,6 +1,5 @@
 package fr.isen.goetz.isensmartcompanion
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +22,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun MainScreen() {
@@ -42,19 +42,34 @@ fun MainScreen() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Title of the main page
+        Text(
+            text = "ACCUEIL",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Divider(
+            color = Color(0xFFD00000),
+            thickness = 2.dp,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+
         //Title ISEN
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = "ISEN",
-                fontSize = 62.sp,
+                fontSize = 72.sp,
                 color = Color(0xFFD00000),
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 text = "Smart Companion",
-                fontSize = 16.sp,
+                fontSize = 19.sp,
                 color = Color.Black
             )
         }

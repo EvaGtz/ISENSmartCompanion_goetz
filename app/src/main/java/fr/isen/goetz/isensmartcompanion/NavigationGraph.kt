@@ -1,18 +1,15 @@
 package fr.isen.goetz.isensmartcompanion
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
-    // Correct: Get the context within the composable function using LocalContext.current
+    // Get the context within the composable function using LocalContext.current
     val context = LocalContext.current
 
     // Get the database and the DAO here
@@ -23,7 +20,20 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
     NavHost(navController, startDestination = "home", modifier = modifier) {
         composable("home") { MainScreen() }
         composable("events") { EventsScreen(navController) }
-        // Pass interactionDao to HistoryScreen
+        composable("agenda") {
+            val sampleCourses = listOf(
+                Course("Math", "10:00 AM"),
+                Course("Science", "12:00 PM")
+            )
+
+            val sampleEvents = listOf(
+                AgendaEvent("Hackathon", "March 1"),
+                AgendaEvent("Workshop", "March 5")
+            )
+
+            // Passing courses and events to the AgendaScreen
+            AgendaScreen(courses = sampleCourses, events = sampleEvents)
+        }
         composable("history") {
             HistoryScreen(interactionDao)
         }
