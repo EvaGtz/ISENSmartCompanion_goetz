@@ -1,5 +1,6 @@
 package fr.isen.goetz.isensmartcompanion
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
 data class Course(
     val courseName: String,
-    val courseTime: String
+    val courseTime: String,
+    val courseRoom: String
 )
 
 data class AgendaEvent(
@@ -88,15 +91,28 @@ fun CourseItem(course: Course) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
-        shape = RoundedCornerShape(10.dp)
+            .padding(bottom = 8.dp)
+            .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = course.courseName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Row for Course Name and Course Room (Aligned to Top-Right)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = course.courseName,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = course.courseRoom,
+                    fontSize = 16.sp,
+                    color = Color(0xFFD00000)
+                )
+            }
+            // Course Time (Below the Row)
             Text(
                 text = course.courseTime,
                 fontSize = 16.sp,
@@ -106,13 +122,15 @@ fun CourseItem(course: Course) {
     }
 }
 
+
 @Composable
 fun EventItem(event: AgendaEvent) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
-        shape = RoundedCornerShape(10.dp)
+            .padding(bottom = 8.dp)
+            .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
+                shape = RoundedCornerShape(10.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(

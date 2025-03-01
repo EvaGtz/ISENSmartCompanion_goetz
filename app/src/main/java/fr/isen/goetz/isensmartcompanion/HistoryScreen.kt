@@ -77,7 +77,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         // List of interactions
         LazyColumn {
@@ -86,8 +86,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(2.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
-                        .clickable { /* Handle click if needed */ },
+                        .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     //colors = CardDefaults.cardColors(containerColor = Color.Gray)
                 ) {
                     Box(modifier = Modifier.fillMaxWidth()) { // Box allows overlaying elements
@@ -126,7 +125,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                             },
                             modifier = Modifier
                                 .align(Alignment.TopEnd) // Moves the icon to the top-right
-                                .padding(8.dp)
+                                .padding(4.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,

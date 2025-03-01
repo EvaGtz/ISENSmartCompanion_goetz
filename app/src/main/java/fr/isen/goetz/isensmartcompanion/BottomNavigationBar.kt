@@ -12,6 +12,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -25,29 +27,37 @@ fun BottomNavigationBar(navController: NavHostController) {
     )
     val labels = listOf("ACCUEIL", "EVENEMENTS", "HISTORIQUE", "AGENDA")
 
-    var selectedItem = 0 // Track selected item
+    var selectedItem by rememberSaveable { mutableStateOf(0) }
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color.Black
+    ) {
         items.forEachIndexed { index, screen ->
             NavigationBarItem(
                 icon = {
                     Icon(
                         imageVector = icons[index],
                         contentDescription = labels[index],
-                        tint = if (selectedItem == index) Color(0xFFD00000) else Color.Gray
+                        tint = if (selectedItem == index) Color(0xFFD00000) else Color.White
                     )
                 },
                 label = {
                     Text(
                         text = labels[index],
-                        color = if (selectedItem == index) Color(0xFFD00000) else Color.Gray
+                        color = if (selectedItem == index) Color(0xFFD00000) else Color.White
                     )
                 },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
                     navController.navigate(screen)
-                }
+                },
+                // Remove background indicator color
+                colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color(0xFFD00000),  // Red for selected icon
+                    unselectedIconColor = Color.White,      // White for unselected icon
+                    indicatorColor = Color.Transparent      // Removes the gray background
+                )
             )
         }
     }

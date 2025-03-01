@@ -22,8 +22,8 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
         composable("events") { EventsScreen(navController) }
         composable("agenda") {
             val sampleCourses = listOf(
-                Course("Math", "10:00 AM"),
-                Course("Science", "12:00 PM")
+                Course("Math", "10:00 AM", "Salle : 319"),
+                Course("Science", "12:00 PM", "Salle : 319")
             )
 
             val sampleEvents = listOf(

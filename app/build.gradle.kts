@@ -70,6 +70,8 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.8")
     //color of the navigation bar
     implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation ("androidx.compose.runtime:runtime:1.5.0")
+    implementation ("androidx.compose.runtime:runtime-saveable:1.5.0")
     //pour l'IA GEMINI
     implementation("com.google.ai.client.generativeai:generativeai:0.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
