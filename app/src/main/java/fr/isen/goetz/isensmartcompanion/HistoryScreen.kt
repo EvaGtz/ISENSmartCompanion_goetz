@@ -37,7 +37,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
             .padding(16.dp)
     ) {
         Text(
-            text = "HISTORIQUE DES EVENEMENTS",
+            text = "HISTORIQUE CONVERSATIONS",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),

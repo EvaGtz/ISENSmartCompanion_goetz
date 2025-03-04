@@ -1,5 +1,6 @@
 package fr.isen.goetz.isensmartcompanion
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,13 +14,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Backpack
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.material3.Divider
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.draw.clip
 
 data class Course(
     val courseName: String,
@@ -63,12 +70,28 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Display Courses
-        Text(
-            text = "COURS",
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "COURS",
+                fontSize = 22.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+            Icon(
+                imageVector = Icons.Filled.Backpack,
+                contentDescription = "Backpack Icon",
+                tint = Color.White
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // List of Courses
         LazyColumn {
@@ -77,27 +100,48 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         // Add Course Button
         Button(
             onClick = { showDialog = true },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD00000)
+            )
         ) {
-            Text("+ Ajouter un cours", color = Color.White)
+            Text(
+                "+ Ajouter un cours",
+                color = Color.White
+            )
         }
 
 
         Spacer(modifier = Modifier.height(20.dp))
 
         // Display Events
-        Text(
-            text = "EVENEMENTS",
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "EVENEMENTS",
+                fontSize = 22.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+            Icon(
+                imageVector = Icons.Filled.Event,
+                contentDescription = "Backpack Icon",
+                tint = Color.White
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // List of Events
         LazyColumn {
@@ -243,7 +287,7 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                contentAlignment = Alignment.BottomStart
+                contentAlignment = Alignment.CenterEnd
             ) {
                 IconButton(
                     onClick = onDelete,

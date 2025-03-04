@@ -159,8 +159,9 @@ fun MainScreen() {
                 },
                 modifier = Modifier
                     .size(50.dp)
-                    .padding(16.dp)
-                    .background(Color(0xFFD00000), shape = RoundedCornerShape(8.dp))
+                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                    .background(Color(0xFFD00000), shape = RoundedCornerShape(8.dp)
+                    )
             ) {
                 // For the white arrow
                 Icon(
