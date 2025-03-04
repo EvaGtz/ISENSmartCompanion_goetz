@@ -12,10 +12,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Divider
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 
 data class Course(
     val courseName: String,
@@ -30,6 +34,12 @@ data class AgendaEvent(
 
 @Composable
 fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
+    val courses = remember { mutableStateListOf(*courses.toTypedArray()) }
+    var showDialog by remember { mutableStateOf(false) }
+    var courseName by remember { mutableStateOf("") }
+    var courseRoom by remember { mutableStateOf("") }
+    var courseTime by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,9 +73,21 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
         // List of Courses
         LazyColumn {
             items(courses) { course ->
-                CourseItem(course = course)
+                CourseItem(course = course, onDelete = { courses.remove(course) }) // Pass onDelete here
             }
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Add Course Button
+        Button(
+            onClick = { showDialog = true },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+        ) {
+            Text("+ Ajouter un cours", color = Color.White)
+        }
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -83,11 +105,110 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                 EventItem(event = event)
             }
         }
+
+        // Show Dialog when button is clicked
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                },
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            "Ajouter un cours",
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                },
+                text = {
+                    Column {
+                        OutlinedTextField(
+                            value = courseName,
+                            onValueChange = { courseName = it },
+                            label = { Text("Matière") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                        OutlinedTextField(
+                            value = courseRoom,
+                            onValueChange = { courseRoom = it },
+                            label = { Text("Salle") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                        OutlinedTextField(
+                            value = courseTime,
+                            onValueChange = { courseTime = it },
+                            label = { Text("Heure") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                    }
+                },
+                confirmButton = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                if (courseName.isNotBlank() && courseRoom.isNotBlank() && courseTime.isNotBlank()) {
+                                courses.add(Course(courseName, courseTime, courseRoom))
+                                showDialog = false
+                                courseName = ""
+                                courseRoom = ""
+                                courseTime = ""
+                            }
+                        },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Black
+                            )
+                        ) {
+                            Text(
+                                "Ajouter",
+                                color = Color.White
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
+
+                        Button(
+                            onClick = {
+                                showDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Black
+                            )
+                        ) {
+                            Text(
+                                "Annuler",
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun CourseItem(course: Course) {
+fun CourseItem(course: Course, onDelete: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,16 +233,32 @@ fun CourseItem(course: Course) {
                     color = Color(0xFFD00000)
                 )
             }
-            // Course Time (Below the Row)
             Text(
                 text = course.courseTime,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 color = Color.Gray
             )
+            // Trash Bin Icon (Delete Button)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                        tint = Color(0xFFD00000)
+                    )
+                }
+            }
         }
     }
 }
-
 
 @Composable
 fun EventItem(event: AgendaEvent) {
@@ -130,7 +267,7 @@ fun EventItem(event: AgendaEvent) {
             .fillMaxWidth()
             .padding(bottom = 8.dp)
             .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
-                shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
