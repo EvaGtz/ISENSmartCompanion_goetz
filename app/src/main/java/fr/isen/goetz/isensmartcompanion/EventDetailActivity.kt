@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,11 +18,14 @@ import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Notifications // Import this
-import androidx.compose.material.icons.filled.NotificationsOff // Import this
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.material3.Card
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Brush
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -61,100 +65,170 @@ fun EventDetailScreen(event: Event) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.9f)),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
+            )
             .padding(16.dp)
     ) {
-        // Back Button
-        Button(
-            onClick = {
-            val eventJson = Gson().toJson(event)
-            navController.navigate("eventDetail/$eventJson")
-        },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD00000)) // Set the button color to red
-        )  {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Retour aux événements",
-                tint = Color.White
-            )
+        // Row to align the Back Button and Reminder Icon
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween // Space them apart
+        ) {
+            // Back Button
+            Button(
+                onClick = {
+                    val eventJson = Gson().toJson(event)
+                    navController.navigate("eventDetail/$eventJson")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD00000)) // Set the button color to red
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Retour aux événements",
+                    tint = Color.White
+                )
+            }
+
+            // Reminder toggle icon button
+            IconButton(onClick = {
+                isReminderSet = !isReminderSet // Toggle reminder state
+
+                // Save reminder preference in SharedPreferences
+                reminderPreferences.saveReminder(event.id, isReminderSet)
+
+                // Show toast notification to the user
+                Toast.makeText(
+                    context,
+                    if (isReminderSet) "Notification activée!" else "Notification désactivée!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                // Schedule notification if reminder is set
+                if (isReminderSet) {
+                    // Pass context to scheduleNotification
+                    scheduleNotification(context, event.id)
+                }
+            }) {
+                Icon(
+                    imageVector = if (isReminderSet) Icons.Filled.Notifications else Icons.Filled.NotificationsOff,
+                    contentDescription = "Reminder",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            // Event Details Card
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = event.title,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
 
-        // Event Details Card
+            Divider(
+                color = Color(0xFFD00000),
+                thickness = 4.dp,
+                modifier = Modifier.padding(top = 6.dp)
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+        // "Catégorie" below the red divider and horizontally centered
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.Gray),
-            shape = RoundedCornerShape(topStart = 13.dp, topEnd = 13.dp),
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color(0x80808080))
         ) {
             Text(
-                text = event.title,
-                fontSize = 30.sp,
+                text = "Catégorie: ${event.category}",
+                fontSize = 18.sp,
+                color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 textAlign = TextAlign.Center
             )
         }
 
-        Divider(
-            color = Color(0xFFD00000),
-            thickness = 4.dp,
-            modifier = Modifier.padding(top = 6.dp)
-        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Row for "Date" (left side) and "Lieu" (right side) under the red divider
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Date with an icon on the left
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.DateRange,
+                    contentDescription = "Date",
+                    modifier = Modifier.size(22.dp),
+                    //tint = Color(0xFFD00000)
+                    tint = Color.Gray
+
+                )
+                Text(
+                    text = "${event.date}",
+                    fontSize = 16.sp
+                )
+            }
+
+            // Lieu on the right
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = "Lieu",
+                    modifier = Modifier.size(22.dp),
+                    //tint = Color(0xFFD00000)
+                    tint = Color.Gray
+                )
+                Text(
+                    text = "${event.location}",
+                    fontSize = 16.sp
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text(
-            text = "Date: ${event.date}",
-            fontSize = 18.sp
-        )
-        Text(
-            text = "Lieu: ${event.location}",
-            fontSize = 18.sp
-        )
-        Text(
-            text = "Catégorie: ${event.category}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
+        // Descriptive text remains unchanged
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color(0x80D00000))
+        ) {
+            Text(
+                text = event.description,
+                fontSize = 18.sp,
+                fontStyle = FontStyle.Italic,
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+            )
+        }
+        /*Text(
             text = event.description,
             fontSize = 18.sp,
             fontStyle = FontStyle.Italic,
             color = Color.Gray
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Reminder toggle icon button
-        IconButton(onClick = {
-            isReminderSet = !isReminderSet // Toggle reminder state
-
-            // Save reminder preference in SharedPreferences
-            reminderPreferences.saveReminder(event.id, isReminderSet)
-
-            // Show toast notification to the user
-            Toast.makeText(
-                context,
-                if (isReminderSet) "Reminder set!" else "Reminder removed!",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            // Schedule notification if reminder is set
-            if (isReminderSet) {
-                // Pass context to scheduleNotification
-                scheduleNotification(context, event.id)
-            }
-        }) {
-            Icon(
-                imageVector = if (isReminderSet) Icons.Filled.Notifications else Icons.Filled.NotificationsOff,
-                contentDescription = "Reminder"
-            )
-        }
+        )*/
     }
 }
 

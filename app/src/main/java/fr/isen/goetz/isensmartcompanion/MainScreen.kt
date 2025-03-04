@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
@@ -38,10 +39,23 @@ fun MainScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.9f)),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
+            )
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
+    /*Column(
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color(0xFFF8F6FA))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    )*/ {
         // Title of the main page
         Text(
             text = "ACCUEIL",
@@ -95,7 +109,7 @@ fun MainScreen() {
                     )
                     Text(
                         "SMART COMPANION: $aiResponse",
-                        color = Color.Gray,
+                        color = Color.Black,
                         fontSize = 13.sp
                     )
                 }

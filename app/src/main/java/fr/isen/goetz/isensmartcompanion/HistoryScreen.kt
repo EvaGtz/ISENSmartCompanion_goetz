@@ -1,5 +1,6 @@
 package fr.isen.goetz.isensmartcompanion
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Brush
 
 @Composable
 fun HistoryScreen(interactionDao: InteractionDao) {
@@ -34,7 +36,14 @@ fun HistoryScreen(interactionDao: InteractionDao) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.9f)),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
+            )
+            .padding(16.dp),
     ) {
         Text(
             text = "HISTORIQUE CONVERSATIONS",

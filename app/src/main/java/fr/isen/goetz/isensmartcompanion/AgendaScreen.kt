@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 
 data class Course(
     val courseName: String,
@@ -50,6 +51,13 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.9f)),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
+            )
             .padding(16.dp)
     ) {
         // Title of the Agenda
