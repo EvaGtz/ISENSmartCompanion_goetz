@@ -1,11 +1,13 @@
 package fr.isen.goetz.isensmartcompanion
 
+import AgendaViewModel
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
@@ -21,18 +23,16 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
         composable("home") { MainScreen() }
         composable("events") { EventsScreen(navController) }
         composable("agenda") {
-            val sampleCourses = listOf(
-                Course("Math", "10:00 AM", "Salle : 319"),
-                Course("Science", "12:00 PM", "Salle : 319")
-            )
+            val agendaViewModel: AgendaViewModel = viewModel()
 
-            val sampleEvents = listOf(
-                AgendaEvent("Hackathon", "March 1"),
-                AgendaEvent("Workshop", "March 5")
+            AgendaScreen(
+                courses = agendaViewModel.courses,
+                events = listOf(
+                    AgendaEvent("Hackathon", "March 1"),
+                    AgendaEvent("Workshop", "March 5")
+                ),
+                onAddCourse = { newCourse -> agendaViewModel.addCourse(newCourse) }
             )
-
-            // Passing courses and events to the AgendaScreen
-            AgendaScreen(courses = sampleCourses, events = sampleEvents)
         }
         composable("history") {
             HistoryScreen(interactionDao)

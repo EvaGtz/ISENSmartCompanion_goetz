@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backpack
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material3.Divider
@@ -26,7 +25,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 
 data class Course(
@@ -41,7 +39,11 @@ data class AgendaEvent(
 )
 
 @Composable
-fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
+fun AgendaScreen(
+    courses: List<Course>,
+    events: List<AgendaEvent>,
+    onAddCourse: (Course) -> Unit
+) {
     val courses = remember { mutableStateListOf(*courses.toTypedArray()) }
     var showDialog by remember { mutableStateOf(false) }
     var courseName by remember { mutableStateOf("") }
@@ -237,7 +239,7 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
+                        Spacer(modifier = Modifier.width(16.dp))
 
                         Button(
                             onClick = {
