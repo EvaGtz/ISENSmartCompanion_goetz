@@ -39,11 +39,7 @@ data class AgendaEvent(
 )
 
 @Composable
-fun AgendaScreen(
-    courses: List<Course>,
-    events: List<AgendaEvent>,
-    onAddCourse: (Course) -> Unit
-) {
+fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
     val courses = remember { mutableStateListOf(*courses.toTypedArray()) }
     var showDialog by remember { mutableStateOf(false) }
     var courseName by remember { mutableStateOf("") }
@@ -222,13 +218,13 @@ fun AgendaScreen(
                         Button(
                             onClick = {
                                 if (courseName.isNotBlank() && courseRoom.isNotBlank() && courseTime.isNotBlank()) {
-                                courses.add(Course(courseName, courseTime, courseRoom))
-                                showDialog = false
-                                courseName = ""
-                                courseRoom = ""
-                                courseTime = ""
-                            }
-                        },
+                                    courses.add(Course(courseName, courseTime, courseRoom))
+                                    showDialog = false
+                                    courseName = ""
+                                    courseRoom = ""
+                                    courseTime = ""
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Black
                             )
@@ -239,7 +235,7 @@ fun AgendaScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
 
                         Button(
                             onClick = {
