@@ -35,16 +35,29 @@ data class Course(
 
 data class AgendaEvent(
     val eventName: String,
-    val eventDate: String
+    val eventCategory: String,
+    val eventDate: String,
+    val eventLocation: String
 )
 
 @Composable
 fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
     val courses = remember { mutableStateListOf(*courses.toTypedArray()) }
-    var showDialog by remember { mutableStateOf(false) }
+    val events = remember { mutableStateListOf(*events.toTypedArray()) }
+
+    var showCourseDialog by remember { mutableStateOf(false) }
+    var showEventDialog by remember { mutableStateOf(false) }
+
+    // Course fields
     var courseName by remember { mutableStateOf("") }
     var courseRoom by remember { mutableStateOf("") }
     var courseTime by remember { mutableStateOf("") }
+
+    // Event fields
+    var eventName by remember { mutableStateOf("") }
+    var eventCategory by remember { mutableStateOf("") }
+    var eventDate by remember { mutableStateOf("") }
+    var eventLocation by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -110,7 +123,7 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
 
         // Add Course Button
         Button(
-            onClick = { showDialog = true },
+            onClick = { showCourseDialog = true },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFD00000)
@@ -152,15 +165,31 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
         // List of Events
         LazyColumn {
             items(events) { event ->
-                EventItem(event = event)
+                EventItem(event = event, onDelete = { events.remove(event) }) // Deleting the event
             }
         }
 
-        // Show Dialog when button is clicked
-        if (showDialog) {
+        Spacer(modifier = Modifier.height(6.dp))
+
+        // Add Course Button
+        Button(
+            onClick = { showEventDialog = true },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD00000)
+            )
+        ) {
+            Text(
+                "+ Ajouter un événement",
+                color = Color.White
+            )
+        }
+
+        // Show Dialog foe the courses when button is clicked
+        if (showCourseDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    showDialog = false
+                    showCourseDialog = false
                 },
                 title = {
                     Row(
@@ -219,7 +248,7 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             onClick = {
                                 if (courseName.isNotBlank() && courseRoom.isNotBlank() && courseTime.isNotBlank()) {
                                     courses.add(Course(courseName, courseTime, courseRoom))
-                                    showDialog = false
+                                    showCourseDialog = false
                                     courseName = ""
                                     courseRoom = ""
                                     courseTime = ""
@@ -239,7 +268,118 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
 
                         Button(
                             onClick = {
-                                showDialog = false
+                                showCourseDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Black
+                            )
+                        ) {
+                            Text(
+                                "Annuler",
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+            )
+        }
+
+        // Show Dialog for the events when button is clicked
+        if (showEventDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showEventDialog = false
+                },
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            "Ajouter un événement",
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                },
+                text = {
+                    Column {
+                        OutlinedTextField(
+                            value = eventName,
+                            onValueChange = { eventName = it },
+                            label = { Text("Nom de l'événement") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                        OutlinedTextField(
+                            value = eventCategory,
+                            onValueChange = { eventCategory = it },
+                            label = { Text("Catégorie") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                        OutlinedTextField(
+                            value = eventDate,
+                            onValueChange = { eventDate = it },
+                            label = { Text("Heure") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                        OutlinedTextField(
+                            value = eventLocation,
+                            onValueChange = { eventLocation = it },
+                            label = { Text("Lieu") },
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
+                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
+                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
+                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                            )
+                        )
+                    }
+                },
+                confirmButton = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                if (eventName.isNotBlank() && eventCategory.isNotBlank() && eventDate.isNotBlank() && eventLocation.isNotBlank()) {
+                                    events.add(AgendaEvent(eventName, eventCategory, eventDate, eventLocation))
+                                    showEventDialog = false
+                                    eventName = ""
+                                    eventCategory = ""
+                                    eventDate = ""
+                                    eventLocation = ""
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Black
+                            )
+                        ) {
+                            Text(
+                                "Ajouter",
+                                color = Color.White
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
+
+                        Button(
+                            onClick = {
+                                showEventDialog = false
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Black
@@ -264,7 +404,10 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
             .fillMaxWidth()
             .padding(bottom = 8.dp)
             .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(alpha = 0.1f)
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Row for Course Name and Course Room (Aligned to Top-Right)
@@ -274,7 +417,7 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
             ) {
                 Text(
                     text = course.courseName,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
@@ -283,10 +426,11 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
                     color = Color(0xFFD00000)
                 )
             }
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = course.courseTime,
-                fontSize = 18.sp,
-                color = Color.Gray
+                fontSize = 16.sp,
+                color = Color.Black
             )
             // Trash Bin Icon (Delete Button)
             Box(
@@ -311,25 +455,63 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
 }
 
 @Composable
-fun EventItem(event: AgendaEvent) {
+fun EventItem(event: AgendaEvent, onDelete: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 8.dp)
             .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(alpha = 0.1f)
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = event.eventName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Row for Event Name and Event Category (Aligned to Top-Right)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = event.eventName,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = event.eventCategory,
+                    fontSize = 16.sp,
+                    color = Color(0xFFD00000)
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = event.eventDate,
                 fontSize = 16.sp,
-                color = Color.Gray
+                color = Color.Black
             )
+            Text(
+                text = event.eventLocation,
+                fontSize = 16.sp,
+                color = Color.Black
+            )
+            // Trash Bin Icon (Delete Button)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                        tint = Color(0xFFD00000)
+                    )
+                }
+            }
         }
     }
 }

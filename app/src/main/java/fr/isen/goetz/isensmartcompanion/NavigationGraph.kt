@@ -9,26 +9,23 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
-    // Get the context within the composable function using LocalContext.current
+    //Get the context using LocalContext.current
     val context = LocalContext.current
 
-    // Get the database and the DAO here
+    //Get the database and the DAO
     val database = AppDatabase.getDatabase(context)
     val interactionDao = database.interactionDao()
 
-    // Define the NavHost with navigation actions
+    //Define the NavHost with navigation actions
     NavHost(navController, startDestination = "home", modifier = modifier) {
         composable("home") { MainScreen() }
         composable("events") { EventsScreen(navController) }
         composable("agenda") {
             val sampleCourses = emptyList<Course>()
 
-            val sampleEvents = listOf(
-                AgendaEvent("Hackathon", "March 1"),
-                AgendaEvent("Workshop", "March 5")
-            )
+            val sampleEvents = emptyList<AgendaEvent>()
 
-            // Passing courses and events to the AgendaScreen
+            //Passing courses and events to AgendaScreen
             AgendaScreen(courses = sampleCourses, events = sampleEvents)
         }
         composable("history") {

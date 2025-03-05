@@ -94,9 +94,12 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
-                        .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
-                    //colors = CardDefaults.cardColors(containerColor = Color.Gray)
+                        .padding(bottom = 8.dp)
+                        .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White.copy(alpha = 0.1f)
+                    )
                 ) {
                     Box(modifier = Modifier.fillMaxWidth()) { // Box allows overlaying elements
                         Column(modifier = Modifier.padding(16.dp)) {
@@ -121,7 +124,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                                     ).format(Date(interaction.date))
                                 }",
                                 fontSize = 14.sp,
-                                color = Color.Gray
+                                color = Color.White
                             )
                         }
 
