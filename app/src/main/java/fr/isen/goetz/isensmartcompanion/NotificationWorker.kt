@@ -13,17 +13,17 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
     override fun doWork(): Result {
         val eventId = inputData.getString("eventId") ?: return Result.failure()
 
-        // Get the reminder preference for this event
+        //Get the reminder preference for this event
         val reminderPreferences = ReminderPreferences(applicationContext)
         val isReminderSet = reminderPreferences.getReminder(eventId)
 
         if (isReminderSet) {
-            // Create the notification channel (if needed)
+            //Create the notification channel
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
-                    "event_channel",  // Channel ID
-                    "Event Notifications", // Channel Name
-                    NotificationManager.IMPORTANCE_HIGH // Importance level
+                    "event_channel",  //Channel ID
+                    "Event Notifications", //Channel Name
+                    NotificationManager.IMPORTANCE_HIGH //Importance level
                 ).apply {
                     description = "Channel for event reminders"
                 }
@@ -37,7 +37,7 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
                 applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             val notification = NotificationCompat.Builder(applicationContext, "event_channel")
-                .setSmallIcon(android.R.drawable.ic_dialog_info)  // You can use the default icon or specify your own
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle("Event Reminder")
                 .setContentText("The event you subscribed to is coming up!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -45,7 +45,6 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
 
             notificationManager.notify(eventId.hashCode(), notification)
         }
-
         return Result.success()
     }
 }

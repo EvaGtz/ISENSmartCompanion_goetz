@@ -1,6 +1,6 @@
 package fr.isen.goetz.isensmartcompanion
 
-//The DAO will provide the necessary methods to insert, delete, and retrieve the interactions from the database.
+//The DAO will provide the necessary methods to insert, delete, and retrieve the interactions from the database
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -14,7 +14,7 @@ interface InteractionDao {
     suspend fun insertInteraction(interaction: Interaction)
 
     @Query("SELECT * FROM interaction")
-    fun getAllInteractions(): Flow<List<Interaction>> // Returning Flow
+    fun getAllInteractions(): Flow<List<Interaction>>
 
     @Delete
     suspend fun deleteInteraction(interaction: Interaction)

@@ -28,9 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun MainScreen() {
     val context =
-        LocalContext.current // Local context for calling methods like startActivity if needed
+        LocalContext.current //Local context for calling methods like startActivity
     var userInput by remember { mutableStateOf(TextFieldValue("")) }
-    var messages by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) } // List of user-input and AI responses
+    var messages by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) } //List of user-input and AI responses
 
     //AppDatabase references
     val database = AppDatabase.getDatabase(context)
@@ -48,15 +48,8 @@ fun MainScreen() {
             )
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
-    )
-    /*Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF8F6FA))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    )*/ {
-        // Title of the main page
+    ) {
+        //Title of the main page
         Text(
             text = "ACCUEIL",
             fontSize = 24.sp,
@@ -143,30 +136,30 @@ fun MainScreen() {
                 onClick = {
                     val inputText = userInput.text
                     if (inputText.isNotEmpty()) {
-                        userInput = TextFieldValue("") // Clear input
-                        messages = messages + (inputText to "Chargement...") // Add loading message
+                        userInput = TextFieldValue("")
+                        messages = messages + (inputText to "Chargement...") //Loading message
 
-                        // Call the AI response in a coroutine
+                        //Call the AI response in a coroutine
                         CoroutineScope(Dispatchers.Main).launch {
                             val response =
-                                getGeminiResponse(inputText) // Get the AI response (nullable String)
+                                getGeminiResponse(inputText) //Get the AI response
 
-                            // Provide a default response if the response is null
+                            //Provide a default response if the response is null
                             val responseText = response ?: "No response available"
 
-                            // Replace loading message with AI response
+                            //Replace loading message with AI response
                             messages = messages.dropLast(1) + (inputText to responseText)
 
-                            // Save to Room database after receiving response
+                            //Save to Room database after receiving response
                             val interaction = Interaction(
                                 question = inputText,
-                                answer = responseText, // Pass the responseText (non-null now)
-                                date = System.currentTimeMillis() // Save the current timestamp
+                                answer = responseText, //Pass the responseText
+                                date = System.currentTimeMillis() //Save the current timestamp
                             )
 
-                            // Save to database (no need for a second CoroutineScope)
+                            //Save to database (no need for a second CoroutineScope)
                             CoroutineScope(Dispatchers.IO).launch {
-                                interactionDao.insertInteraction(interaction) // Save interaction to database
+                                interactionDao.insertInteraction(interaction) //Save interaction to database
                             }
                         }
                     }
@@ -177,7 +170,6 @@ fun MainScreen() {
                     .background(Color(0xFFD00000), shape = RoundedCornerShape(8.dp)
                     )
             ) {
-                // For the white arrow
                 Icon(
                     imageVector = Icons.Filled.ArrowUpward,
                     contentDescription = "Envoyer",
@@ -193,5 +185,3 @@ fun MainScreen() {
 fun AssistantUIPreview() {
     MainScreen()
 }
-
-

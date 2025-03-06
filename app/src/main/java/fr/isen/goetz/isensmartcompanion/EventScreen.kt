@@ -25,7 +25,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 
 @Composable
@@ -35,7 +34,7 @@ fun EventsScreen(navController: NavHostController) {
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf("") }
 
-    // Fetch events data from Retrofit
+    //Fetch events data from Retrofit
     LaunchedEffect(Unit) {
         RetrofitInstance.retrofitService.getEvents().enqueue(object : Callback<List<Event>> {
             override fun onResponse(call: Call<List<Event>>, response: Response<List<Event>>) {
@@ -101,8 +100,8 @@ fun EventsScreen(navController: NavHostController) {
                                 val gson = Gson()
                                 val intent = Intent(context, EventDetailActivity::class.java)
                                 val jsonEvent = gson.toJson(event)
-                                intent.putExtra("event_json", jsonEvent) // Send event data in JSON
-                                context.startActivity(intent) // Start EventDetailActivity
+                                intent.putExtra("event_json", jsonEvent) //Send event data in JSON
+                                context.startActivity(intent) //Start EventDetailActivity
                             },
                         colors = CardDefaults.cardColors(containerColor = Color(0xFFD00000)),
                         shape = RoundedCornerShape(topEnd = 13.dp, bottomStart = 13.dp, bottomEnd = 13.dp)
@@ -124,6 +123,5 @@ fun EventsScreen(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewEventScreen() {
-    // You can call the function here for a preview
     EventsScreen(navController = rememberNavController())
 }

@@ -17,15 +17,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Event
-import androidx.compose.material3.Divider
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.style.TextAlign
 
 data class Course(
     val courseName: String,
@@ -48,18 +47,18 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
     var showCourseDialog by remember { mutableStateOf(false) }
     var showEventDialog by remember { mutableStateOf(false) }
 
-    // Course fields
+    //Course fields
     var courseName by remember { mutableStateOf("") }
     var courseRoom by remember { mutableStateOf("") }
     var courseTime by remember { mutableStateOf("") }
 
-    // Event fields
+    //Event fields
     var eventName by remember { mutableStateOf("") }
     var eventCategory by remember { mutableStateOf("") }
     var eventDate by remember { mutableStateOf("") }
     var eventLocation by remember { mutableStateOf("") }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -69,123 +68,123 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                     endY = Float.POSITIVE_INFINITY
                 )
             )
-            .padding(16.dp)
     ) {
-        // Title of the Agenda
-        Text(
-            text = "AGENDA",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-
-        Divider(
-            color = Color(0xFFD00000),
-            thickness = 2.dp,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Display Courses
-        Row(
+        //Title
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Black)
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
             Text(
-                text = "COURS",
-                fontSize = 22.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                text = "AGENDA",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
-            Icon(
-                imageVector = Icons.Filled.Backpack,
-                contentDescription = "Backpack Icon",
-                tint = Color.White
+
+            // Divider below the title
+            Divider(
+                color = Color(0xFFD00000),
+                thickness = 2.dp,
+                modifier = Modifier.padding(top = 4.dp)
             )
-        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // List of Courses
-        LazyColumn {
-            items(courses) { course ->
-                CourseItem(course = course, onDelete = { courses.remove(course) }) // Pass onDelete here
+            //COURS
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "COURS",
+                    fontSize = 22.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+                Icon(
+                    imageVector = Icons.Filled.Backpack,
+                    contentDescription = "Backpack Icon",
+                    tint = Color.White
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            //Scrollable courses list
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(courses) { course ->
+                    CourseItem(course = course, onDelete = { courses.remove(course) })
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // Add Course Button
+            Button(
+                onClick = { showCourseDialog = true },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFD00000)
+                )
+            ) {
+                Text("+ Ajouter un cours", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            //EVENEMENTS
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "EVENEMENTS",
+                    fontSize = 22.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+                Icon(
+                    imageVector = Icons.Filled.Event,
+                    contentDescription = "Event Icon",
+                    tint = Color.White
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Scrollable Events List
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(events) { event ->
+                    EventItem(event = event, onDelete = { events.remove(event) })
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            //Event Button
+            Button(
+                onClick = { showEventDialog = true },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFD00000)
+                )
+            ) {
+                Text("+ Ajouter un événement", color = Color.White)
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
 
-        // Add Course Button
-        Button(
-            onClick = { showCourseDialog = true },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFD00000)
-            )
-        ) {
-            Text(
-                "+ Ajouter un cours",
-                color = Color.White
-            )
-        }
-
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Display Events
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Black)
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "EVENEMENTS",
-                fontSize = 22.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-            Icon(
-                imageVector = Icons.Filled.Event,
-                contentDescription = "Backpack Icon",
-                tint = Color.White
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // List of Events
-        LazyColumn {
-            items(events) { event ->
-                EventItem(event = event, onDelete = { events.remove(event) }) // Deleting the event
-            }
-        }
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        // Add Course Button
-        Button(
-            onClick = { showEventDialog = true },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFD00000)
-            )
-        ) {
-            Text(
-                "+ Ajouter un événement",
-                color = Color.White
-            )
-        }
-
-        // Show Dialog foe the courses when button is clicked
+        //Show Dialog for the courses when button is clicked
         if (showCourseDialog) {
             AlertDialog(
                 onDismissRequest = {
@@ -284,7 +283,7 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
             )
         }
 
-        // Show Dialog for the events when button is clicked
+        //Show Dialog for the events when button is clicked
         if (showEventDialog) {
             AlertDialog(
                 onDismissRequest = {
@@ -319,10 +318,10 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             onValueChange = { eventCategory = it },
                             label = { Text("Catégorie") },
                             colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
-                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
-                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
-                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                                focusedIndicatorColor = Color(0xFFD00000),
+                                unfocusedIndicatorColor = Color.Gray,
+                                focusedLabelColor = Color(0xFFD00000),
+                                unfocusedLabelColor = Color.Gray
                             )
                         )
                         OutlinedTextField(
@@ -330,10 +329,10 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             onValueChange = { eventDate = it },
                             label = { Text("Heure") },
                             colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
-                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
-                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
-                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                                focusedIndicatorColor = Color(0xFFD00000),
+                                unfocusedIndicatorColor = Color.Gray,
+                                focusedLabelColor = Color(0xFFD00000),
+                                unfocusedLabelColor = Color.Gray
                             )
                         )
                         OutlinedTextField(
@@ -341,10 +340,10 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             onValueChange = { eventLocation = it },
                             label = { Text("Lieu") },
                             colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color(0xFFD00000), // Red border when focused
-                                unfocusedIndicatorColor = Color.Gray, // Gray border when not focused
-                                focusedLabelColor = Color(0xFFD00000), // Red label when focused
-                                unfocusedLabelColor = Color.Gray // Gray label when not focused
+                                focusedIndicatorColor = Color(0xFFD00000),
+                                unfocusedIndicatorColor = Color.Gray,
+                                focusedLabelColor = Color(0xFFD00000),
+                                unfocusedLabelColor = Color.Gray
                             )
                         )
                     }
@@ -375,7 +374,7 @@ fun AgendaScreen(courses: List<Course>, events: List<AgendaEvent>) {
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
+                        Spacer(modifier = Modifier.width(16.dp))
 
                         Button(
                             onClick = {
@@ -406,11 +405,10 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
             .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.1f)
+            containerColor = Color.White.copy(alpha = 0.2f)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Row for Course Name and Course Room (Aligned to Top-Right)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -432,7 +430,7 @@ fun CourseItem(course: Course, onDelete: () -> Unit) {
                 fontSize = 16.sp,
                 color = Color.Black
             )
-            // Trash Bin Icon (Delete Button)
+            //Delete button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -463,11 +461,10 @@ fun EventItem(event: AgendaEvent, onDelete: () -> Unit) {
             .border(1.dp, Color(0xFFD00000), shape = RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.1f)
+            containerColor = Color.White.copy(alpha = 0.2f)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Row for Event Name and Event Category (Aligned to Top-Right)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -494,7 +491,7 @@ fun EventItem(event: AgendaEvent, onDelete: () -> Unit) {
                 fontSize = 16.sp,
                 color = Color.Black
             )
-            // Trash Bin Icon (Delete Button)
+            //Delete Button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

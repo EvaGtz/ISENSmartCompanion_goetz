@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,10 +26,10 @@ import androidx.compose.ui.graphics.Brush
 
 @Composable
 fun HistoryScreen(interactionDao: InteractionDao) {
-    // Collect interactions from the Room database using Flow
+    //Collect interactions from the Room database using Flow
     val interactions by interactionDao.getAllInteractions().collectAsState(initial = emptyList())
 
-    // Get the coroutine scope to launch coroutines within this composable
+    //Get the coroutine scope to launch coroutines within this composable
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -61,7 +60,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Delete all history button
+        //Button to delete all history
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -88,7 +87,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // List of interactions
+        //List of interactions with gemini
         LazyColumn {
             items(interactions) { interaction ->
                 Card(
@@ -98,10 +97,10 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                         .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.1f)
+                        containerColor = Color.White.copy(alpha = 0.2f)
                     )
                 ) {
-                    Box(modifier = Modifier.fillMaxWidth()) { // Box allows overlaying elements
+                    Box(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = interaction.question,
@@ -128,7 +127,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                             )
                         }
 
-                        // Delete button positioned at top-right
+                        //Delete button
                         IconButton(
                             onClick = {
                                 coroutineScope.launch(Dispatchers.IO) {
@@ -136,7 +135,7 @@ fun HistoryScreen(interactionDao: InteractionDao) {
                                 }
                             },
                             modifier = Modifier
-                                .align(Alignment.TopEnd) // Moves the icon to the top-right
+                                .align(Alignment.TopEnd)
                                 .padding(4.dp)
                         ) {
                             Icon(

@@ -8,12 +8,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.ManageHistory
 import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.runtime.*
@@ -21,7 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    // Add "agenda" to the items, icons, and labels
+    //Add "agenda" to the items, icons, and labels
     val items = listOf("home", "events", "history", "agenda")
     val icons = listOf(
         Icons.Filled.Home,
@@ -56,11 +52,11 @@ fun BottomNavigationBar(navController: NavHostController) {
                     selectedItem = index
                     navController.navigate(screen)
                 },
-                // Remove background indicator color
+                //Remove background indicator color
                 colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color(0xFFD00000),  // Red for selected icon
-                    unselectedIconColor = Color.White,      // White for unselected icon
-                    indicatorColor = Color.Transparent      // Removes the gray background
+                    selectedIconColor = Color(0xFFD00000),  //Red for selected icon
+                    unselectedIconColor = Color.White,            //White for unselected icon
+                    indicatorColor = Color.Transparent            //Removes the gray background
                 )
             )
         }
