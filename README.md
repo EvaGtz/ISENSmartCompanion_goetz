@@ -35,5 +35,5 @@
     - Pour ajouter un cours, cliquer sur le bouton rouge "+ Ajouter un cours"
     - Remplisser les champs "Matière", "Salle", "Heure"
   -  Champ "EVENENEMENT"
-    - Pour ajouter un événement, cliquer sur le bouton rouge "+ Ajouter un événement"
-    - Remplisser les champs "Nom de l'événement", "Catégorie", "Heure", "Lieu"
+     - Pour ajouter un événement, cliquer sur le bouton rouge "+ Ajouter un événement"
+     - Remplisser les champs "Nom de l'événement", "Catégorie", "Heure", "Salle"
